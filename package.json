@@ -1,24 +1,11 @@
 {
-  "name": "discordjs-startup",
+  "name": "Planet-bot-project",
   "version": "1.0.0",
-  "description": "discord.js on Heroku",
-  "main": "discordbot.js",
+  "description": "Planet-bot-projectのプログラムです！",
+  "main": "index.js",
   "scripts": {
-    "start": "node discordbot.js",
-    "lint": "eslint ."
+    "start": "node index.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/DiscordBotPortalJP/discordjs-startup.git"
-  },
-  "author": "Discord Bot Portal JP",
-  "license": "MIT",
-  "dependencies": {
-    "discord.js": "^12.5.3"
-  },
-  "devDependencies": {
-    "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.23.4"
-  }
+  "author": "Hoshimikan6490",
+  "license": "MIT"
 }

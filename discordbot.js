@@ -12,29 +12,28 @@ const prefix = "p!";
 const token = process.env.DISCORD_BOT_TOKEN;
 
 // botが準備できれば発動され、 上から順に処理される。
-client.on('ready', () => {
+client.on("ready", () => {
   // コンソールにReady!!と表示
-  console.log('Ready!!');
+  console.log("Ready!!");
 
   // ステータスを設定する
-  client.user.setPresence({
-    status: 'online',
     //ステータスの選択肢
     //・online：オンライン
     //・idle：退席中
     //・dnd：取り込み中
     //・invisibl：オンラインを隠す
-    activity: {
-      //name:"プログラムの編集！！",
-      //type:"Playing"
-      name: client.guilds.cache.size + "サーバー",
-      type: "WATCHING"
-    }
-  });
+  client.user.setActivity(
+     // ○○サーバーを設定
+    client.guilds.cache.size + "サーバー",
+	 // ～をプレイ中に設定
+	  { type: "WATCHING" },
+	 // オンラインに設定
+	  { status: "online" });
   client.channels.cache.get("889486664760721418").send("起動しました！");
 
   // readyイベントここまで
 });
+
 
 // botがメッセージを受信すると発動され、 上から順に処理される。
 client.on('messageCreate', message => {

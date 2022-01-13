@@ -1,15 +1,14 @@
-//botのステータスを表示
 const http = require('http');
 http.createServer(function(req, res) {
   res.write("Discord bot is active.\nPleace check it.");
   res.end();
 }).listen(8080);
 
-// BOTの初期設定
-const Discord = require('discord.js');
+// Discord bot implements
+const Discord = require("discord.js");
 const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES] });
-const prefix = "p!";
-const token = process.env.DISCORD_BOT_TOKEN;
+const prefix = 'p!';
+const token = process.env['TOKEN'];
 
 // botが準備できれば発動され、 上から順に処理される。
 client.on("ready", () => {
@@ -17,26 +16,17 @@ client.on("ready", () => {
   console.log("Ready!!");
 
   // ステータスを設定する
-    //ステータスの選択肢
-    //・online：オンライン
-    //・idle：退席中
-    //・dnd：取り込み中
-    //・invisibl：オンラインを隠す
   client.user.setActivity(
-     // ○○サーバーを設定
     client.guilds.cache.size + "サーバー",
-	 // ～をプレイ中に設定
-	  { type: "WATCHING" },
-	 // オンラインに設定
-	  { status: "online" });
+    { type: "PLAYING" },
+    { status: "online" });
   client.channels.cache.get("889486664760721418").send("起動しました！");
 
   // readyイベントここまで
 });
 
-
 // botがメッセージを受信すると発動され、 上から順に処理される。
-client.on('messageCreate', message => {
+client.on('messageCreate', async message => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
 	const args = message.content.slice(prefix.length).trim().split(' ');
@@ -72,8 +62,29 @@ client.on('messageCreate', message => {
         }
       ]
     })
+  } else if (command === 'help') {
+    message.channel.send({
+      embeds: [
+        {
+          title: "Planet BOT HELP",
+          description:
+            "`p!ping`でPINGを見てみよう！\n\n`p!botadmin`でこのBOTの管理者のメンションをするよ\n\n`p!me`であなたにメンションするよ\n\n`p!help`でこれを表示するよ\n\n`p!omikuji`でおみくじを引けるよ\n\n`p!t_create <チャンネル名>`でテキストチャンネルを作成するよ\n　※要、チャンネル管理権限\n\n`p!reset`でBOTを再起動するよ(__**BOT管理者限定機能**__)\n\n`p!stop`でBOTを停止するよ(__**BOT管理者限定機能**__)",
+          color: 4303284,
+          thumbnail: {
+            url:
+              "https://cdn.glitch.com/093732ff-8a9a-41f2-bbc6-103db32effb2%2FPlanet%20BOT.png?v=1626835130086"
+          },
+          footer: {
+            icon_url:
+              "https://cdn.glitch.com/093732ff-8a9a-41f2-bbc6-103db32effb2%2FNEW%E3%83%AD%E3%82%B4_%E6%AD%A3%E6%96%B9%E5%BD%A2.jpg?v=1626835161805",
+            text: "This bot is made by Hoshimikan6490"
+          },
+          timestamp: new Date()
+        }
+      ]
+    })
   } else if (command === 'ping') {
-		message.channel.send({
+    message.channel.send({
       embeds: [
         {
           title: "🏓Ping!!",
@@ -81,69 +92,31 @@ client.on('messageCreate', message => {
           color: 15132165,
           timestamp: new Date()
         }
-       ]
+      ]
     })
+
   } else if (command === 'botadmin') {
     message.channel.send({
       embeds: [
         {
-         title: "このBOTの管理者👇",
-         description:
-           "<@728495196303523900>が管理しております。お問い合わせはこの人までどうぞ！",
-         color: 3823616,
-         timestamp: new Date()
+          title: "このBOTの管理者👇",
+          description:
+            "<@728495196303523900>が管理しております。お問い合わせはこの人までどうぞ！",
+          color: 3823616,
+          timestamp: new Date()
         }
-       ]
+      ]
     })
   } else if (command === 'me') {
     // ↓ここに指定した文字列がボットの発言になる
-    let reply_text = "👈あなたの名前";
+    let reply_text = "はい。メンションしてあげたよ！ｗ";
     message
       .reply(reply_text)
       .then(message => console.log("Sent message: " + reply_text))
       .catch(console.error);
     return;
-    
-  } else if (command === 'help') {
-    message.channel.send({
-      embeds: [
-        {
-         title: "Planet BOT HELP",
-         description:
-           "`p!ping`でPINGを見てみよう！\n\n`p!botadmin`で管理者のメンションをするよ\n\n`p!me`であなたにメンションするよ\n\n`p!help`でこれを表示するよ\n\n`p!omikuji`でおみくじを引けるよ\n\n`p!reset`でBOTを再起動するよ(__**管理者限定機能**__)\n\n`p!stop`でBOTを停止するよ(__**管理者限定機能**__)",
-         color: 4303284,
-         thumbnail: {
-           url:
-             "https://cdn.glitch.com/093732ff-8a9a-41f2-bbc6-103db32effb2%2FPlanet%20BOT.png?v=1626835130086"
-         },
-         footer: {
-           icon_url:
-             "https://cdn.glitch.com/093732ff-8a9a-41f2-bbc6-103db32effb2%2FNEW%E3%83%AD%E3%82%B4_%E6%AD%A3%E6%96%B9%E5%BD%A2.jpg?v=1626835161805",
-           text: "This bot is made by Hoshimikan6490"
-         },
-         timestamp: new Date()
-        }
-       ]
-     })
-  } else if (command === 'reset') {
-  // ↓UserIDがHoshimikan6490なら、
-    if (message.author.id === "728495196303523900") {
-    // ↓リセットを実行
-      resetBot(message.channel);
-    // ↓そうでないのなら、エラーメッセージを送信
-    } else {
-      message.channel.send("申し訳ございません。あなたにそのコマンドを実行する権限がありません。\n詳細は作者までお問い合わせください。");
-    }
-  } else if (command === 'stop') {
-  // ↓UserIDがHoshimikan6490なら、
-    if (message.author.id === "728495196303523900") {
-    // ↓リセットを実行
-      stopBot(message.channel);
-    // ↓そうでないのなら、エラーメッセージを送信
-    } else {
-      message.channel.send("申し訳ございません。あなたにそのコマンドを実行する権限がありません。\n詳細は作者までお問い合わせください。");
-    }
-  } else if (command === 'omikuji') {
+
+	} else if (command === 'omikuji') {
     let arr = ["大吉", "中吉", "小吉", "吉", "凶", "大凶"];
     var random = Math.floor(Math.random() * arr.length);
     var result = arr[random];
@@ -155,36 +128,64 @@ client.on('messageCreate', message => {
           color: 4817413,
           footer: {
             icon_url:
-            "https://cdn.glitch.com/093732ff-8a9a-41f2-bbc6-103db32effb2%2FNEW%E3%83%AD%E3%82%B4_%E6%AD%A3%E6%96%B9%E5%BD%A2.jpg?v=1626835161805",
+              "https://cdn.glitch.com/093732ff-8a9a-41f2-bbc6-103db32effb2%2FNEW%E3%83%AD%E3%82%B4_%E6%AD%A3%E6%96%B9%E5%BD%A2.jpg?v=1626835161805",
             text: "This bot is made by Hoshimikan6490"
           },
           timestamp: new Date()
         }
       ]
     });
-  } else {
+  
+  } else if (command === 't_create') {
+    // チャンネル管理権限チェック
+		if (!message.member.permissions.has("MANAGE_CHANNELS"))
+    {return message.channel.send(`${message.author}\nあなたは、チャンネル管理権限を持っていないため、このコマンドを実行する権限がありません。`);
+    // チャンネル名が無ければreturn
+    } else if (!args.length) {
+			return message.channel.send(`${message.author}\n申し訳ありません。チャンネル名を指定してください。`);
+      }
+		  message.channel.send(`チャンネル「${args}」を作成します。`);
+      message.guild.channels.create(`${args}`, { parent: message.channel.parent });
+  
+  } else if (command === 'reset') {
+    // ↓UserIDがHoshimikan6490なら、
+    if (message.author.id === "728495196303523900") {
+      // ↓リセットを実行
+      resetBot(message.channel);
+      // ↓そうでないのなら、エラーメッセージを送信
+    } else {
+      message.channel.send("申し訳ございません。あなたにそのコマンドを実行する権限がありません。\n詳細は作者までお問い合わせください。");
+    }
+  } else if (command === 'stop') {
+    // ↓UserIDがHoshimikan6490なら、
+    if (message.author.id === "728495196303523900") {
+      // ↓リセットを実行
+      stopBot(message.channel);
+      // ↓そうでないのなら、エラーメッセージを送信
+    } else {
+      message.channel.send("申し訳ございません。あなたにそのコマンドを実行する権限がありません。\n詳細は作者までお問い合わせください。");
+    }
+  } else{
     message.channel.send('そのコマンドは存在しません。(m´・ω・｀)m ｺﾞﾒﾝ…')
   }
-})
-    
+});
+
 
 // ↓BOTリセット用のresetBot関数の中身
 function resetBot(channel) {
   // チャンネルにボットをリセットする旨のメッセージを送る
-  channel
-    .send("再起動しています...");
-    .then(msg => client.destroy());
-    .then(() => client.login(process.env.DISCORD_BOT_TOKEN));
-    .send("起動しました！");
+  channel.send("再起動しています...");
+  channel.then(msg => client.destroy());
+  channel.then(() => client.login(process.env.DISCORD_BOT_TOKEN));
+  channel.send("起動しました！");
 }
 
 // ↓BOTstop用のresetBot関数の中身
 function stopBot(channel) {
   // チャンネルにボットをリセットする旨のメッセージを送る [任意]
-  channel
-    .send("停止しています...");
-    .then(msg => client.destroy());
-    .send("停止しました！");
+  channel.send("停止しています...");
+  channel.then(msg => client.destroy());
+  channel.send("停止しました！");
 }
 
 client.login(token);

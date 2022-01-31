@@ -16,10 +16,11 @@ client.on("ready", () => {
   console.log("Ready!!");
 
   // ステータスを設定する
-  client.user.setActivity(
-    client.guilds.cache.size + "サーバー",
-    { type: "PLAYING" },
-    { status: "online" });
+   setInterval(() => {
+     client.user.setActivity({
+       name: `所属サーバー数は、${client.guilds.cache.size}サーバー｜　Ping値は、${client.ws.ping}msです`
+     })
+   }, 10000)
   client.channels.cache.get("889486664760721418").send("起動しました！");
 
   // readyイベントここまで

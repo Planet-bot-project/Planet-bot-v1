@@ -8,7 +8,7 @@ http.createServer(function(req, res) {
 const Discord = require("discord.js");
 const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES] });
 const prefix = 'p!';
-const token = process.env['TOKEN'];
+const token = process.env.TOKEN;
 
 // botが準備できれば発動され、 上から順に処理される。
 client.on("ready", () => {
@@ -16,11 +16,11 @@ client.on("ready", () => {
   console.log("Ready!!");
 
   // ステータスを設定する
-   setInterval(() => {
-     client.user.setActivity({
-       name: `所属サーバー数は、${client.guilds.cache.size}サーバー｜　Ping値は、${client.ws.ping}msです`
-     })
-   }, 10000)
+  setInterval(() => {
+    client.user.setActivity({
+      name: `プレフィクスは、「${prefix}」 ｜ 所属サーバー数は、${client.guilds.cache.size}サーバー ｜ Ping値は、${client.ws.ping}ms`
+    })
+  }, 10000)
   client.channels.cache.get("889486664760721418").send("起動しました！");
 
   // readyイベントここまで
@@ -30,8 +30,8 @@ client.on("ready", () => {
 client.on('messageCreate', async message => {
   if (!message.content.startsWith(prefix) || message.author.bot) return;
 
-	const args = message.content.slice(prefix.length).trim().split(' ');
-	const command = args.shift().toLowerCase();
+  const args = message.content.slice(prefix.length).trim().split(' ');
+  const command = args.shift().toLowerCase();
 
   if (command === 'about') {
     message.channel.send({
@@ -53,7 +53,7 @@ client.on('messageCreate', async message => {
         {
           "type": "rich",
           "title": `Planet botについて`,
-          "description": `node.jsで作成された、適当なbotです。\n\n\nご不明な点は、下記「お問い合わせ」ボタンから、どうぞ！`,
+          "description": `node.jsで作成された、適当なbotです。\n\n\nご不明な点は、以下のボタンから、サポートサーバーに参加して、お問い合わせください！`,
           "color": 0x498205,
           "thumbnail": {
             "url": `https://dm2301files.storage.live.com/y4mHu8xS098WXra-akl0FwsCHTS9kaUNUgNOpn3lRpFd4bgAqmdzehL-InVE9WiZBZf6CeLkhebhbW40FC2_htnvc4o_1tqs1MjpdvuF4KGyHSxsArUXDsrhGbPoSRub9ZUA-c_xQlCdbs6r421fAJ73ZqQ8nIubzx2v_IJQG4Bi6ToveLanJyIkxWxDe-spoWX?width=500&height=500&cropmode=none`,
@@ -69,7 +69,7 @@ client.on('messageCreate', async message => {
         {
           title: "Planet BOT HELP",
           description:
-            "`p!ping`でPINGを見てみよう！\n\n`p!botadmin`でこのBOTの管理者のメンションをするよ\n\n`p!me`であなたにメンションするよ\n\n`p!help`でこれを表示するよ\n\n`p!omikuji`でおみくじを引けるよ\n\n`p!t_create <チャンネル名>`でテキストチャンネルを作成するよ\n　※要、チャンネル管理権限\n\n`p!reset`でBOTを再起動するよ(__**BOT管理者限定機能**__)\n\n`p!stop`でBOTを停止するよ(__**BOT管理者限定機能**__)",
+            "`p!ping`でPINGを見てみよう！\n\n`p!botadmin`でこのBOTの管理者のメンションをするよ\n\n`p!me`であなたにメンションするよ\n\n`p!help`でこれを表示するよ\n\n`p!omikuji`でおみくじを引けるよ\n\n`p!tc_create <チャンネル名>`でテキストチャンネルを作成するよ\n　※要、チャンネル管理権限\n\n`p!stop`でBOTを停止するよ(__**BOT管理者限定機能**__)",
           color: 4303284,
           thumbnail: {
             url:
@@ -117,7 +117,7 @@ client.on('messageCreate', async message => {
       .catch(console.error);
     return;
 
-	} else if (command === 'omikuji') {
+  } else if (command === 'omikuji') {
     let arr = ["大吉", "中吉", "小吉", "吉", "凶", "大凶"];
     var random = Math.floor(Math.random() * arr.length);
     var result = arr[random];
@@ -136,27 +136,18 @@ client.on('messageCreate', async message => {
         }
       ]
     });
-  
-  } else if (command === 't_create') {
+
+  } else if (command === 'tc_create') {
     // チャンネル管理権限チェック
-		if (!message.member.permissions.has("MANAGE_CHANNELS"))
-    {return message.channel.send(`${message.author}\nあなたは、チャンネル管理権限を持っていないため、このコマンドを実行する権限がありません。`);
-    // チャンネル名が無ければreturn
+    if (!message.member.permissions.has("MANAGE_CHANNELS")) {
+      return message.channel.send(`${message.author}\nあなたは、チャンネル管理権限を持っていないため、このコマンドを実行する権限がありません。`);
+      // チャンネル名が無ければreturn
     } else if (!args.length) {
-			return message.channel.send(`${message.author}\n申し訳ありません。チャンネル名を指定してください。`);
-      }
-		  message.channel.send(`チャンネル「${args}」を作成します。`);
-      message.guild.channels.create(`${args}`, { parent: message.channel.parent });
-  
-  } else if (command === 'reset') {
-    // ↓UserIDがHoshimikan6490なら、
-    if (message.author.id === "728495196303523900") {
-      // ↓リセットを実行
-      resetBot(message.channel);
-      // ↓そうでないのなら、エラーメッセージを送信
-    } else {
-      message.channel.send("申し訳ございません。あなたにそのコマンドを実行する権限がありません。\n詳細は作者までお問い合わせください。");
+      return message.channel.send(`${message.author}\n申し訳ありません。チャンネル名を指定してください。`);
     }
+    message.channel.send(`チャンネル「${args}」を作成します。`);
+    message.guild.channels.create(`${args}`, { parent: message.channel.parent });
+
   } else if (command === 'stop') {
     // ↓UserIDがHoshimikan6490なら、
     if (message.author.id === "728495196303523900") {
@@ -166,27 +157,19 @@ client.on('messageCreate', async message => {
     } else {
       message.channel.send("申し訳ございません。あなたにそのコマンドを実行する権限がありません。\n詳細は作者までお問い合わせください。");
     }
-  } else{
+  } else {
     message.channel.send('そのコマンドは存在しません。(m´・ω・｀)m ｺﾞﾒﾝ…')
   }
 });
 
 
-// ↓BOTリセット用のresetBot関数の中身
-function resetBot(channel) {
-  // チャンネルにボットをリセットする旨のメッセージを送る
-  channel.send("再起動しています...");
-  channel.then(msg => client.destroy());
-  channel.then(() => client.login(process.env.DISCORD_BOT_TOKEN));
-  channel.send("起動しました！");
-}
-
 // ↓BOTstop用のresetBot関数の中身
 function stopBot(channel) {
   // チャンネルにボットをリセットする旨のメッセージを送る [任意]
-  channel.send("停止しています...");
-  channel.then(msg => client.destroy());
-  channel.send("停止しました！");
+  channel.send("停止します");
+  client.destroy();
+  console.log("管理者によって、停止しました")
 }
+
 
 client.login(token);

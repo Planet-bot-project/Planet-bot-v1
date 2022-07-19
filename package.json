@@ -14,7 +14,7 @@
   "author": "Discord Bot Portal JP",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^14.0.1",
+    "discord.js": "^14.0.2",
     "dotenv": "^16.0.1"
   },
   "devDependencies": {
